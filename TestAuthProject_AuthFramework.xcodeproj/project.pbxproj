@@ -11,6 +11,23 @@
 		FF5B22362A49D30A00FDFCFB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22352A49D30A00FDFCFB /* ContentView.swift */; };
 		FF5B22382A49D30A00FDFCFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5B22372A49D30A00FDFCFB /* Assets.xcassets */; };
 		FF5B223B2A49D30A00FDFCFB /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5B223A2A49D30A00FDFCFB /* Preview Assets.xcassets */; };
+		FF5B22432A49D35800FDFCFB /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = FF5B22412A49D35700FDFCFB /* amplifyconfiguration.json */; };
+		FF5B22442A49D35800FDFCFB /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = FF5B22422A49D35800FDFCFB /* awsconfiguration.json */; };
+		FF5B22592A49D45500FDFCFB /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF5B22582A49D45500FDFCFB /* AWSAPIPlugin */; };
+		FF5B225B2A49D45500FDFCFB /* AWSCognitoAuthPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF5B225A2A49D45500FDFCFB /* AWSCognitoAuthPlugin */; };
+		FF5B225D2A49D45500FDFCFB /* AWSS3StoragePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = FF5B225C2A49D45500FDFCFB /* AWSS3StoragePlugin */; };
+		FF5B225F2A49D45500FDFCFB /* Amplify in Frameworks */ = {isa = PBXBuildFile; productRef = FF5B225E2A49D45500FDFCFB /* Amplify */; };
+		FF5B22612A49D4F100FDFCFB /* UserInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22602A49D4F100FDFCFB /* UserInformation.swift */; };
+		FF5B22642A49D5F800FDFCFB /* AmplifyAuthCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22632A49D5F800FDFCFB /* AmplifyAuthCode.swift */; };
+		FF5B22682A49E0B400FDFCFB /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22672A49E0B400FDFCFB /* Stopwatch.swift */; };
+		FF5B22712A49F66800FDFCFB /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22702A49F66800FDFCFB /* HomeScreen.swift */; };
+		FF5B22732A4A312600FDFCFB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22722A4A312600FDFCFB /* LoginView.swift */; };
+		FFF171D42A4B459B00F9DAEA /* ConfirmEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */; };
+		FFF171D62A4B895900F9DAEA /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D52A4B895900F9DAEA /* RegisterView.swift */; };
+		FFF171D82A4C562200F9DAEA /* ForgotPasswordRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */; };
+		FFF171DA2A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D92A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift */; };
+		FFF171DC2A4C597D00F9DAEA /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171DB2A4C597D00F9DAEA /* PasswordResetView.swift */; };
+		FFF171DE2A4C5B9C00F9DAEA /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171DD2A4C5B9C00F9DAEA /* AccountView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +36,19 @@
 		FF5B22352A49D30A00FDFCFB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		FF5B22372A49D30A00FDFCFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FF5B223A2A49D30A00FDFCFB /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FF5B22412A49D35700FDFCFB /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		FF5B22422A49D35800FDFCFB /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
+		FF5B22602A49D4F100FDFCFB /* UserInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInformation.swift; sourceTree = "<group>"; };
+		FF5B22632A49D5F800FDFCFB /* AmplifyAuthCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplifyAuthCode.swift; sourceTree = "<group>"; };
+		FF5B22672A49E0B400FDFCFB /* Stopwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopwatch.swift; sourceTree = "<group>"; };
+		FF5B22702A49F66800FDFCFB /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		FF5B22722A4A312600FDFCFB /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmail.swift; sourceTree = "<group>"; };
+		FFF171D52A4B895900F9DAEA /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordRequestView.swift; sourceTree = "<group>"; };
+		FFF171D92A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordConfirmView.swift; sourceTree = "<group>"; };
+		FFF171DB2A4C597D00F9DAEA /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
+		FFF171DD2A4C5B9C00F9DAEA /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +56,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5B22592A49D45500FDFCFB /* AWSAPIPlugin in Frameworks */,
+				FF5B225F2A49D45500FDFCFB /* Amplify in Frameworks */,
+				FF5B225B2A49D45500FDFCFB /* AWSCognitoAuthPlugin in Frameworks */,
+				FF5B225D2A49D45500FDFCFB /* AWSS3StoragePlugin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -35,6 +69,8 @@
 		FF5B22272A49D30900FDFCFB = {
 			isa = PBXGroup;
 			children = (
+				FF5B22412A49D35700FDFCFB /* amplifyconfiguration.json */,
+				FF5B22422A49D35800FDFCFB /* awsconfiguration.json */,
 				FF5B22322A49D30A00FDFCFB /* TestAuthProject_AuthFramework */,
 				FF5B22312A49D30A00FDFCFB /* Products */,
 			);
@@ -51,10 +87,13 @@
 		FF5B22322A49D30A00FDFCFB /* TestAuthProject_AuthFramework */ = {
 			isa = PBXGroup;
 			children = (
-				FF5B22332A49D30A00FDFCFB /* TestAuthProject_AuthFrameworkApp.swift */,
-				FF5B22352A49D30A00FDFCFB /* ContentView.swift */,
 				FF5B22372A49D30A00FDFCFB /* Assets.xcassets */,
 				FF5B22392A49D30A00FDFCFB /* Preview Content */,
+				FF5B22332A49D30A00FDFCFB /* TestAuthProject_AuthFrameworkApp.swift */,
+				FF5B22352A49D30A00FDFCFB /* ContentView.swift */,
+				FF5B22702A49F66800FDFCFB /* HomeScreen.swift */,
+				FFF171D22A4B455600F9DAEA /* AuthenticationViews */,
+				FF5B22622A49D58800FDFCFB /* CIAuthenticationStack */,
 			);
 			path = TestAuthProject_AuthFramework;
 			sourceTree = "<group>";
@@ -65,6 +104,30 @@
 				FF5B223A2A49D30A00FDFCFB /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FF5B22622A49D58800FDFCFB /* CIAuthenticationStack */ = {
+			isa = PBXGroup;
+			children = (
+				FF5B22602A49D4F100FDFCFB /* UserInformation.swift */,
+				FF5B22632A49D5F800FDFCFB /* AmplifyAuthCode.swift */,
+				FF5B22672A49E0B400FDFCFB /* Stopwatch.swift */,
+			);
+			path = CIAuthenticationStack;
+			sourceTree = "<group>";
+		};
+		FFF171D22A4B455600F9DAEA /* AuthenticationViews */ = {
+			isa = PBXGroup;
+			children = (
+				FF5B22722A4A312600FDFCFB /* LoginView.swift */,
+				FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */,
+				FFF171D52A4B895900F9DAEA /* RegisterView.swift */,
+				FFF171D92A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift */,
+				FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */,
+				FFF171DB2A4C597D00F9DAEA /* PasswordResetView.swift */,
+				FFF171DD2A4C5B9C00F9DAEA /* AccountView.swift */,
+			);
+			path = AuthenticationViews;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -83,6 +146,12 @@
 			dependencies = (
 			);
 			name = TestAuthProject_AuthFramework;
+			packageProductDependencies = (
+				FF5B22582A49D45500FDFCFB /* AWSAPIPlugin */,
+				FF5B225A2A49D45500FDFCFB /* AWSCognitoAuthPlugin */,
+				FF5B225C2A49D45500FDFCFB /* AWSS3StoragePlugin */,
+				FF5B225E2A49D45500FDFCFB /* Amplify */,
+			);
 			productName = TestAuthProject_AuthFramework;
 			productReference = FF5B22302A49D30A00FDFCFB /* TestAuthProject_AuthFramework.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +180,9 @@
 				Base,
 			);
 			mainGroup = FF5B22272A49D30900FDFCFB;
+			packageReferences = (
+				FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */,
+			);
 			productRefGroup = FF5B22312A49D30A00FDFCFB /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -125,7 +197,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF5B22442A49D35800FDFCFB /* awsconfiguration.json in Resources */,
 				FF5B223B2A49D30A00FDFCFB /* Preview Assets.xcassets in Resources */,
+				FF5B22432A49D35800FDFCFB /* amplifyconfiguration.json in Resources */,
 				FF5B22382A49D30A00FDFCFB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -139,6 +213,17 @@
 			files = (
 				FF5B22362A49D30A00FDFCFB /* ContentView.swift in Sources */,
 				FF5B22342A49D30A00FDFCFB /* TestAuthProject_AuthFrameworkApp.swift in Sources */,
+				FFF171DC2A4C597D00F9DAEA /* PasswordResetView.swift in Sources */,
+				FFF171D62A4B895900F9DAEA /* RegisterView.swift in Sources */,
+				FF5B22642A49D5F800FDFCFB /* AmplifyAuthCode.swift in Sources */,
+				FF5B22682A49E0B400FDFCFB /* Stopwatch.swift in Sources */,
+				FFF171D42A4B459B00F9DAEA /* ConfirmEmail.swift in Sources */,
+				FFF171DA2A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift in Sources */,
+				FF5B22732A4A312600FDFCFB /* LoginView.swift in Sources */,
+				FF5B22612A49D4F100FDFCFB /* UserInformation.swift in Sources */,
+				FFF171DE2A4C5B9C00F9DAEA /* AccountView.swift in Sources */,
+				FF5B22712A49F66800FDFCFB /* HomeScreen.swift in Sources */,
+				FFF171D82A4C562200F9DAEA /* ForgotPasswordRequestView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +424,40 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/aws-amplify/amplify-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF5B22582A49D45500FDFCFB /* AWSAPIPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSAPIPlugin;
+		};
+		FF5B225A2A49D45500FDFCFB /* AWSCognitoAuthPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSCognitoAuthPlugin;
+		};
+		FF5B225C2A49D45500FDFCFB /* AWSS3StoragePlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = AWSS3StoragePlugin;
+		};
+		FF5B225E2A49D45500FDFCFB /* Amplify */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF5B22572A49D45500FDFCFB /* XCRemoteSwiftPackageReference "amplify-swift" */;
+			productName = Amplify;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FF5B22282A49D30900FDFCFB /* Project object */;
 }
