@@ -7,13 +7,18 @@
 
 import Foundation
 import SwiftUI
+import Amplify
 
-public struct LoginView: View {
+struct LoginView: View {
     @State private var isUsernameValid = false
     @State private var isPasswordValid = false
+    @State private var loginError = ""
+    @State private var showLoginError = false
+    @State private var errorMessage = ""
+    @State private var showError = false
     @EnvironmentObject var athm: AuthManager
     
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             TextField("Email", text: $athm.userAccount.email)
                 .padding()
@@ -36,9 +41,19 @@ public struct LoginView: View {
                     isPasswordValid = athm.isValidPassword(newValue)
                     print(isPasswordValid)
                 }
+            if showLoginError {
+                VStack {
+                    Text(loginError)
+                }
+            }
+            if showError {
+                VStack {
+                    Text(errorMessage)
+                }
+            }
             
             Button(action: {
-                athm.signIn()
+                signIn()
             }) {
                 Text("Log in")
                     .font(.headline)
@@ -49,6 +64,8 @@ public struct LoginView: View {
             }
             
             Button(action: {
+                showLoginError = false
+                showError = false
                 athm.signOut()
             }) {
                 Text("Sign Out")
@@ -99,6 +116,27 @@ public struct LoginView: View {
         .onAppear {
             Task {
                 try await athm.awaitAuthSession()
+            }
+        }
+    }
+    
+    func signIn(){
+        Task{
+            do {
+                try await athm.signIn(username: athm.userAccount.email, password: athm.userAccount.password)
+                showLoginError = false
+                showError = false
+                print("showLoginError: \(showLoginError)")
+            } catch let error as AuthError {
+                print("🛑 Error Signing In: \(error)")
+                loginError = error.errorDescription
+                print("🛑 Error Signing In: \(loginError)")
+                showLoginError = true
+                print("showLoginError: \(showLoginError)")
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
+                print("Unexpected error: \(error)")
             }
         }
     }

@@ -10,14 +10,16 @@ import SwiftUI
 import Amplify
 import Combine
 
-public struct ForgotPasswordRequestView: View {
+struct ForgotPasswordRequestView: View {
     @State private var isUsernameValid = false
     @State private var authErrorMessage = ""
     @State private var errorMessage = ""
+    @State private var showAuthError = false
+    @State private var showError = false
     
     @EnvironmentObject var athm: AuthManager
     
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
             VStack(alignment: .leading, spacing: 40) {
                 Group {
@@ -35,37 +37,26 @@ public struct ForgotPasswordRequestView: View {
                             isUsernameValid = athm.isValidEmail(newValue)
                         }
                     
-                    if !authErrorMessage.isEmpty {
-                        HStack(spacing: 20) {
+                    if showAuthError {
+                        VStack(spacing: 20) {
                             Text(authErrorMessage)
-                            Spacer()
                         }
-                        .padding(.leading, 40)
                     }
                     
-                    if !errorMessage.isEmpty {
-                        HStack(spacing: 20) {
+                    if showError {
+                        VStack(spacing: 20) {
                             Text(errorMessage)
-                            Spacer()
                         }
-                        .padding(.leading, 40)
                     }
                 }
                 
                 HStack {
                     Button(action: {
-                        Task {
-                            do {
-                                try await forgotPassword()
-                            } catch let error as AuthError {
-                                authErrorMessage = error.localizedDescription
-                                print("❌ \(error)")
-                            } catch {
-                                errorMessage = error.localizedDescription
-                                print("❌ Unexpected error: \(error)")
-                            }
-                        }
-                    }) {
+                        showAuthError = false
+                        showError = false
+                        forgotPassword()
+                    })
+                    {
                         Text("Confirm")
                             .font(.headline)
                             .foregroundColor(.white)
@@ -87,18 +78,20 @@ public struct ForgotPasswordRequestView: View {
         }
     }
     
-    func forgotPassword() async throws {
-        do {
-            try await athm.resetPassword(username: athm.userAccount.email)
-            authErrorMessage = ""
-            errorMessage = ""
-            athm.authState = .forgotConfirm
-        } catch let error as AuthError {
-            authErrorMessage = error.localizedDescription
-            print("❌ \(error)")
-        } catch {
-            errorMessage = error.localizedDescription
-            print("❌ Unexpected error: \(error)")
+    func forgotPassword() {
+        Task{
+            do {
+                try await athm.resetPassword(username: athm.userAccount.email)
+                athm.authState = .forgotConfirm
+            } catch let error as AuthError {
+                authErrorMessage = error.errorDescription
+                showAuthError = true
+                print("❌ \(error)")
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
+                print("❌ Unexpected error: \(error)")
+            }
         }
     }
 }

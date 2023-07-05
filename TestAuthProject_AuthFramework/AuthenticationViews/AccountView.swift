@@ -8,10 +8,10 @@
 import Foundation
 import SwiftUI
 
-public struct AccountView: View {
+struct AccountView: View {
     
     @EnvironmentObject var athm: AuthManager
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
             ZStack {
                 Spacer().frame(height: 40)
@@ -72,7 +72,7 @@ public struct AccountView: View {
                         
                         HStack(spacing: 20){
                             Button(action: {
-                                print("Delete Account")
+                                athm.deleteUserAction()
                             }) {
                                 Text("Delete Account")
                                     .font(.headline)

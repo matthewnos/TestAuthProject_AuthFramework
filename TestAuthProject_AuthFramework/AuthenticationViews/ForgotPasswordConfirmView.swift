@@ -12,7 +12,7 @@ import Combine
 
 
 
-public struct ForgotPasswordConfirmationView: View {
+struct ForgotPasswordConfirmationView: View {
     @State var newPassword: String = ""
     @State var showAuthError: Bool = false
     @State var showError: Bool = false
@@ -21,10 +21,14 @@ public struct ForgotPasswordConfirmationView: View {
     @State var authErrorMessage: String = ""
     @State var errorMessage: String = ""
     @State var confirmationCode: String = ""
+    @State var reErrorMessage = ""
+    @State var resendErrorMessage = ""
+    @State var showResendError = false
+    @State var showReError = false
     
     @EnvironmentObject var athm: AuthManager
     
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 40) {
             TextField("Email", text: $athm.userAccount.email)
                 .padding()
@@ -43,7 +47,7 @@ public struct ForgotPasswordConfirmationView: View {
                 }
                 .padding(.horizontal)
             
-            SecureField("Password", text: $newPassword)
+            SecureField("New Password", text: $newPassword)
                 .padding()
                 .frame(maxWidth: .infinity)
                 .font(.body)
@@ -69,32 +73,58 @@ public struct ForgotPasswordConfirmationView: View {
                 .cornerRadius(8)
                 .padding(.horizontal)
             
-            VStack(spacing: 20) {
                 if showAuthError {
-                    HStack(spacing: 20) {
+                    VStack() {
                         Text(authErrorMessage)
-                        Spacer()
-                    }.padding(.leading)
+                    }
                 }
                 
                 if showError {
-                    HStack(spacing: 20) {
+                    VStack() {
                         Text(errorMessage)
-                        Spacer()
-                    }.padding(.leading)
+                    }
+                }
+            
+            if showResendError {
+                VStack() {
+                    Text(resendErrorMessage)
+                }
+            }
+            
+            if showReError {
+                VStack() {
+                    Text(reErrorMessage)
                 }
             }
             
             Button(action: {
-                Task {
-                    do {
-                        try await forgotPasswordConfirm()
-                    } catch {
-                        print("Error:", error)
-                    }
-                }
+                        showError = false
+                        showAuthError = false
+                        showResendError = false
+                        showReError = false
+                        forgotPasswordConfirm()
             }) {
                 Text("Confirm")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color.blue)
+                    .cornerRadius(8)
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.blue)
+            .cornerRadius(8)
+            .padding(.horizontal)
+            
+            Button(action: {
+                        showError = false
+                        showAuthError = false
+                        showResendError = false
+                        showReError = false
+                        resendCode()
+            }) {
+                Text("Resend Code")
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
@@ -110,25 +140,40 @@ public struct ForgotPasswordConfirmationView: View {
         .padding(.vertical)
     }
     
-    func forgotPasswordConfirm() async throws {
-        do {
-            try await athm.confirmResetPassword(username: athm.userAccount.email, newPassword: newPassword, confirmationCode: confirmationCode)
-            showError = false
-            authErrorMessage = ""
-            errorMessage = ""
-            athm.userAccount.password = newPassword
-            athm.signOut()
-            athm.authState = .login
-        } catch let error as AuthError {
-            // Handle specific AuthError
-            authErrorMessage = error.localizedDescription
-            showAuthError = true
-            print("❌ \(error)")
-        } catch {
-            // Handle other errors
-            errorMessage = error.localizedDescription
-            showError = true
-            print("❌ Unexpected error: \(error)")
+    func forgotPasswordConfirm() {
+        Task {
+            do {
+                try await athm.confirmResetPassword(username: athm.userAccount.email, newPassword: newPassword, confirmationCode: confirmationCode)
+                athm.userAccount.password = newPassword
+                athm.signOut()
+                athm.authState = .login
+            } catch let error as AuthError {
+                authErrorMessage = error.errorDescription
+                showAuthError = true
+                print("❌ \(error)")
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
+                print("❌ Unexpected error: \(error)")
+            }
+            
+        }
+    }
+    
+    func resendCode() {
+        Task {
+            do {
+                try await athm.resendCodeEmail()
+            } catch let error as AuthError {
+                resendErrorMessage = error.errorDescription
+                showResendError = true
+                print("❌ \(error)")
+            } catch {
+                reErrorMessage = error.localizedDescription
+                showReError = true
+                print("❌ Unexpected error: \(error)")
+            }
+            
         }
     }
 }

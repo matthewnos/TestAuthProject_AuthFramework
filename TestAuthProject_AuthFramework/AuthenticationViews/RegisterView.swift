@@ -8,12 +8,17 @@
 import Foundation
 import SwiftUI
 import Combine
+import Amplify
 
-public struct RegisterView: View {
+struct RegisterView: View {
     
     @State private var username = ""
     @State private var password = ""
     @State private var phone = ""
+    @State private var registerError = ""
+    @State private var errorMessage = ""
+    @State private var showRegisterError = false
+    @State private var showError = false
     @State private var isUsernameValid = false
     @State private var isPasswordValid = false
     @State private var isPhoneValid = false
@@ -25,7 +30,7 @@ public struct RegisterView: View {
     
     @EnvironmentObject var athm: AuthManager
     
-    public var body: some View {
+    var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             TextField("Email", text: $athm.userAccount.email)
                 .padding()
@@ -68,8 +73,9 @@ public struct RegisterView: View {
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: phone) { newValue in
+                    athm.userAccount.phoneNumber = phone
                     isPhoneValid = athm.isValidPhone(newValue)
-                    athm.userAccount.phoneNumber = athm.cleanPhone(number: phone)
+                    print("newValue: \(newValue)")
                     print("isPhoneValid: \(isPhoneValid)")
                     print("phone: \(phone)")
                     print("athm phone: \(athm.userAccount.phoneNumber)")
@@ -105,14 +111,32 @@ public struct RegisterView: View {
                     print("isLastNameValid: \(isLastNameValid)")
                 }
             
+            if showRegisterError {
+                VStack {
+                    Text(registerError)
+                }
+            }
+            if showError {
+                VStack {
+                    Text(errorMessage)
+                }
+            }
+            
+            
             Button(action: {
                 print("🔴 Register Here...")
-                if AuthManager.shared.isValidRegistration(email: athm.userAccount.isValidEmail(athm.userAccount.email), pass: athm.userAccount.isValidPassword(athm.userAccount.password), phone: athm.userAccount.isValidPhone(athm.userAccount.phoneNumber), first: athm.userAccount.isValidName(athm.userAccount.firstName), last: athm.userAccount.isValidName(athm.userAccount.lastName)) {
-                    print("🟢 Registered and Validated")
-                    athm.register(username: athm.userAccount.email, password: athm.userAccount.password, email: athm.userAccount.email, phonenumber: athm.userAccount.phoneNumber)
-                } else {
-                    print("🔴 Not Valid")
-                }
+                print("email valid?: \(athm.userAccount.isValidEmail(athm.userAccount.email))")
+                print("password valid?: \(athm.userAccount.isValidPassword(athm.userAccount.password))")
+                print("phone valid?: \(athm.userAccount.isValidPhone(athm.userAccount.phoneNumber))")
+                print("firstName valid?: \(athm.userAccount.isValidName(athm.userAccount.firstName))")
+                print("lastName valid?: \(athm.userAccount.isValidName(athm.userAccount.lastName))")
+                registerAction()
+//                if AuthManager.shared.isValidRegistration(email: athm.userAccount.isValidEmail(athm.userAccount.email), pass: athm.userAccount.isValidPassword(athm.userAccount.password), phone: athm.userAccount.isValidPhone(athm.userAccount.phoneNumber), first: athm.userAccount.isValidName(athm.userAccount.firstName), last: athm.userAccount.isValidName(athm.userAccount.lastName)) {
+//                    print("🟢 Registered and Validated")
+//                    registerAction()
+//                } else {
+//                    print("🔴 Not Valid")
+//                }
             })
             {
                 Text("Register")
@@ -140,6 +164,29 @@ public struct RegisterView: View {
         }
         .padding()
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func registerAction(){
+        Task {
+            do {
+                try await athm.signUp(username: athm.userAccount.email, password: athm.userAccount.password, email: athm.userAccount.email, phonenumber: athm.userAccount.phoneNumber)
+                showRegisterError = false
+                showError = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                    athm.authState = .confirm
+                }
+            } catch let error as AuthError {
+                print("🛑 Error Signing In: \(error)")
+                registerError = error.errorDescription
+                print("🛑 Error Signing Up: \(registerError)")
+                showRegisterError = true
+                print("showRegisterError: \(showRegisterError)")
+            } catch {
+                errorMessage = error.localizedDescription
+                showError = true
+                print("Unexpected error: \(error)")
+            }
+        }
     }
 }
 

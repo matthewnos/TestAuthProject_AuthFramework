@@ -14,7 +14,7 @@ import AWSCognitoAuthPlugin
 
 
 @MainActor
-public class AuthManager: ObservableObject {
+class AuthManager: ObservableObject {
     
     @Published public var isSignedIn: Bool = false
     @Published public var message: String = ""
@@ -54,8 +54,8 @@ public class AuthManager: ObservableObject {
     
     @Published public var userRights: UserRights = UserRights.make()
     @Published var authState: AuthState = .none
-    public var authToken: String = ""
-    public var subs = Set<AnyCancellable>()
+    var authToken: String = ""
+    var subs = Set<AnyCancellable>()
     private var _refreshStopwatch: Stopwatch? = nil
     var refreshStopwatch: Stopwatch {
         get {
@@ -64,9 +64,9 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public static let shared = AuthManager()
+    static let shared = AuthManager()
     
-    public enum AuthState {
+    enum AuthState {
         case register
         case login
         case reset
@@ -84,7 +84,7 @@ public class AuthManager: ObservableObject {
     
     
     //MARK: Amplify
-    public func signIn(username: String, password: String) async throws {
+    func signIn(username: String, password: String) async throws {
         do {
             let signInResult = try await Amplify.Auth.signIn(username: username, password: password)
             if signInResult.isSignedIn {
@@ -107,11 +107,11 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func errorLoad(){
+    func errorLoad(){
 
     }
     
-    public func signIn(){
+    func signIn(){
         Task{
             do {
                 try await signIn(username: userAccount.email, password: userAccount.password)
@@ -121,7 +121,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func refreshSignIn() {
+    func refreshSignIn() {
         print("Refreshing Sign-In Auth Token")
         Task {
             do {
@@ -134,7 +134,7 @@ public class AuthManager: ObservableObject {
     }
     
     //MARK: Sign Up
-    public func signUp(username: String, password: String, email: String, phonenumber: String) async {
+    func signUp(username: String, password: String, email: String, phonenumber: String) async throws {
         let cleanPhone = cleanPhone(number: phonenumber)
         let userAttributes = [AuthUserAttribute(.email, value: email),AuthUserAttribute(.phoneNumber, value: cleanPhone)]
         let options = AuthSignUpRequest.Options(userAttributes: userAttributes)
@@ -152,14 +152,16 @@ public class AuthManager: ObservableObject {
         } catch let error as AuthError {
             print("An error occurred while registering a user \(error)")
             errorLoad()
+            throw error
         } catch {
             print("Unexpected error: \(error)")
             errorLoad()
+            throw error
         }
     }
     
     //MARK: Confirm Sign Up
-    public func confirmSignUp(for username: String, with confirmationCode: String) async {
+    func confirmSignUp(for username: String, with confirmationCode: String) async throws {
         do {
             let confirmSignUpResult = try await Amplify.Auth.confirmSignUp(
                 for: username,
@@ -169,23 +171,52 @@ public class AuthManager: ObservableObject {
         } catch let error as AuthError {
             print("An error occurred while confirming sign up \(error)")
             errorLoad()
+            throw error
         } catch {
             print("Unexpected error: \(error)")
             errorLoad()
+            throw error
+        }
+    }
+        
+        func resendCode(for username: String) async throws {
+            do {
+                let request = try await Amplify.Auth.resendSignUpCode(for: username)
+            }catch let error as AuthError {
+                print("An error occurred while confirming sign up \(error)")
+                errorLoad()
+                throw error
+            } catch {
+                print("Unexpected error: \(error)")
+                errorLoad()
+                throw error
+            }
+        }
+    
+    func resendCodeEmail() async throws{
+        do {
+            let deliveryDetails = try await Amplify.Auth.resendConfirmationCode(forUserAttributeKey: .email)
+            print("Resend code send to - \(deliveryDetails)")
+        } catch let error as AuthError {
+            print("Resend code failed with error \(error)")
+            throw error
+        } catch {
+            print("Unexpected error: \(error)")
+            throw error
         }
     }
     
     //MARK: Confirm Sign Up & Sign In
-    public func confirm(username: String, code: String) {
+    func confirm(username: String, code: String) {
         Task {
             do {
-                await confirmSignUp(for: username, with: code)
+                try await confirmSignUp(for: username, with: code)
                 try await signIn(username: userAccount.email, password: userAccount.password)
             }
         }
     }
     
-    public func awaitAttributes() async throws -> (email: String, phone: String) {
+    func awaitAttributes() async throws -> (email: String, phone: String) {
         do {
             let attributes = try await Amplify.Auth.fetchUserAttributes()
             guard let email = attributes.first(where: { $0.key == AuthUserAttributeKey.email })?.value,
@@ -202,7 +233,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func getAuthToken() async throws -> String {
+    func getAuthToken() async throws -> String {
         do {
             let session = try await Amplify.Auth.fetchAuthSession(options: .forceRefresh())
             if let cognitoTokenProvider = session as? AuthCognitoTokensProvider {
@@ -223,7 +254,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func awaitAuthSession() async throws -> Bool {
+    func awaitAuthSession() async throws -> Bool {
         do {
             let session = try await Amplify.Auth.fetchAuthSession(options: .forceRefresh())
             if session.isSignedIn {
@@ -246,7 +277,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func signOutGlobally() async {
+    func signOutGlobally() async {
         let result = await Amplify.Auth.signOut(options: .init(globalSignOut: true))
         guard let signOutResult = result as? AWSCognitoSignOutResult
         else {
@@ -277,7 +308,7 @@ public class AuthManager: ObservableObject {
     
     //Forgot Password (needs auth from email)
     
-    public func resetPassword(username: String) async throws {
+    func resetPassword(username: String) async throws {
         do {
             let resetResult = try await Amplify.Auth.resetPassword(for: username)
             switch resetResult.nextStep {
@@ -306,7 +337,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func confirmResetPassword(username: String, newPassword: String, confirmationCode: String) async throws {
+    func confirmResetPassword(username: String, newPassword: String, confirmationCode: String) async throws {
         do {
             try await Amplify.Auth.confirmResetPassword(
                 for: username,
@@ -325,7 +356,7 @@ public class AuthManager: ObservableObject {
     
     //Change Password, must be logged in to do this
     //MARK: Change Password
-    public func changePassword(oldPassword: String, newPassword: String) async throws {
+    func changePassword(oldPassword: String, newPassword: String) async throws {
         do {
             try await Amplify.Auth.update(oldPassword: oldPassword, to: newPassword)
             print("🟢 Change password succeeded")
@@ -343,10 +374,10 @@ public class AuthManager: ObservableObject {
 
     
     //MARK: Sign Up
-    public func register(username: String, password: String, email: String, phonenumber: String){
+    func register(username: String, password: String, email: String, phonenumber: String){
         Task {
             do {
-                await signUp(username: username, password: password, email: email, phonenumber: phonenumber)
+                try await signUp(username: username, password: password, email: email, phonenumber: phonenumber)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
                     authState = .confirm
                 }
@@ -355,12 +386,36 @@ public class AuthManager: ObservableObject {
     }
     
     //MARK: Sign Out
-    public func signOut(){
+    func signOut(){
         Task {
             do {
                 await signOutGlobally()
                 authState = .login
             }
+        }
+    }
+    //MARK: Delete User
+    
+    
+    func deleteUserAction(){
+        Task {
+            do {
+                await deleteUser()
+                await signOutGlobally()
+                authState = .register
+            }
+        }
+    }
+    
+    func deleteUser() async {
+        do {
+            try await Amplify.Auth.deleteUser()
+            print("🟢 Successfully deleted user")
+            authState = .register
+        } catch let error as AuthError {
+            print("🛑 Delete user failed with error \(error)")
+        } catch {
+            print("🛑 Unexpected error: \(error)")
         }
     }
     
@@ -377,36 +432,36 @@ public class AuthManager: ObservableObject {
     @Published public var tempBool: Bool = true
 
     
-    public func isValidLogin(email: Bool, pass: Bool) -> Bool {
+    func isValidLogin(email: Bool, pass: Bool) -> Bool {
         if email == true && pass == true {
             return true
         }
         return false
     }
     
-    public func isValidRegistration(email: Bool, pass: Bool, phone: Bool, first: Bool, last: Bool) -> Bool {
+    func isValidRegistration(email: Bool, pass: Bool, phone: Bool, first: Bool, last: Bool) -> Bool {
         return email && pass && phone && first && last
     }
     
-    public func isValidName(_ name: String) -> Bool {
+    func isValidName(_ name: String) -> Bool {
         let regEx = "(?<! )[-a-zA-Z' ]{2,26}"
         let nameCheck = NSPredicate(format: "SELF MATCHES %@", regEx)
         return nameCheck.evaluate(with: name)
     }
     
-    public func isValidPhone(_ phone: String) -> Bool {
+    func isValidPhone(_ phone: String) -> Bool {
         let regEx = #"^\(?\d{3}\)?[ -]?\d{3}[ -]?\d{4}$"#
         let phoneCheck = NSPredicate(format: "SELF MATCHES[c] %@", regEx)
         return phoneCheck.evaluate(with: phone)
     }
     
-    public func isValidEmail(_ email: String) -> Bool {
+    func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
     
-    public func regexPassword(_ password: String) -> Bool {
+    func regexPassword(_ password: String) -> Bool {
         let passwordRegEx = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()_+\\-=[\\]{}|;':\",./<>?])(?!.*?(.)\\1{2})[A-Za-z\\d!@#$%^&*()_+\\-=[\\]{}|;':\",./<>?]{8,}$"
         do {
             let passwordRegex = try NSRegularExpression(pattern: passwordRegEx, options: [])
@@ -419,7 +474,7 @@ public class AuthManager: ObservableObject {
         }
     }
     
-    public func regexEmail(_ email: String) -> Bool {
+    func regexEmail(_ email: String) -> Bool {
         let emailRegEx = "^(?=.{1,256})(?=.{1,64}@.{1,255}$)(?=.{1,64}[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}$)(?:(?:[^<>()\\[\\]\\\\.,;:\\s@\"]+(?:\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(?:(?:[^<>()[\\]\\\\.,;:\\s@\"]+\\.)?[^<>()[\\]\\\\.,;:\\s@\"]{1,64}@[^<>()[\\]\\\\.,;:\\s@\"]{1,255}\\.[^<>()[\\]\\\\.,;:\\s@\"]{2,6})$"
         
         do {
@@ -434,14 +489,14 @@ public class AuthManager: ObservableObject {
     }
     
     //MARK: Clean Phone Number
-    public func isValidPassword(_ password: String) -> Bool {
+    func isValidPassword(_ password: String) -> Bool {
         let regEx = "^\\A(?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9])(?=\\S*[#^_@$!%*?&])\\S{8,}\\z$"
         let passwordCheck = NSPredicate(format: "SELF MATCHES %@", regEx)
         return passwordCheck.evaluate(with: password)
     }
     
     //MARK: Clean Phone Number
-    public func cleanPhone(number: String) -> String {
+    func cleanPhone(number: String) -> String {
         let clean = "+1"+number
         print("Clean Number: \(clean)")
         return clean
@@ -449,11 +504,11 @@ public class AuthManager: ObservableObject {
     
 }
 
-public protocol AuthCognitoTokensProvider {
+protocol AuthCognitoTokensProvider {
     func getCognitoTokens() -> Result<AuthCognitoTokens, AuthError>
 }
 
-public protocol AuthCognitoTokens {
+protocol AuthCognitoTokens {
 
     var idToken: String {get}
 
@@ -462,4 +517,3 @@ public protocol AuthCognitoTokens {
     var refreshToken: String {get}
 
 }
-

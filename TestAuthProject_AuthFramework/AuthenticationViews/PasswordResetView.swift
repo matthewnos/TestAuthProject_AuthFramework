@@ -10,7 +10,7 @@ import SwiftUI
 import Amplify
 import Combine
 
-public struct PasswordResetView: View {
+struct PasswordResetView: View {
     @State var backgroundColor: Color = .red
     @State var show: Bool = false
     @State var width: CGFloat = UIScreen.main.bounds.width * 0.7
@@ -24,13 +24,13 @@ public struct PasswordResetView: View {
     
     @EnvironmentObject var athm: AuthManager
     
-    public var body: some View {
+    var body: some View {
         VStack(spacing: 0) {
-            ZStack {
+            VStack {
                 VStack(alignment: .leading, spacing: 40) {
                     Group {
                         HStack(spacing: 20){
-                            SecureField("Password", text: $athm.userAccount.password)
+                            SecureField("Old Password", text: $athm.userAccount.password)
                                 .padding()
                                 .font(.body)
                                 .foregroundColor(.primary)
@@ -44,7 +44,7 @@ public struct PasswordResetView: View {
                         }.padding(.leading, 40)
                         
                         HStack(spacing: 20){
-                            SecureField("Password", text: $newPassword)
+                            SecureField("New Password", text: $newPassword)
                                 .padding()
                                 .font(.body)
                                 .foregroundColor(.primary)
@@ -110,7 +110,7 @@ public struct PasswordResetView: View {
             athm.signOut()
             athm.authState = .login
         } catch let error as AuthError {
-            authErrorMessage = error.localizedDescription
+            authErrorMessage = error.errorDescription
             showAuthError = true
             print("Change password failed with error \(error)")
         } catch {
