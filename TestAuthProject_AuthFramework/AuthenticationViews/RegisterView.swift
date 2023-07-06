@@ -31,15 +31,13 @@ struct RegisterView: View {
     @EnvironmentObject var athm: AuthManager
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
+        VStack(alignment: .center, spacing: 20) {
             TextField("Email", text: $athm.userAccount.email)
                 .padding()
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: athm.userAccount.email) { newValue in
@@ -51,10 +49,8 @@ struct RegisterView: View {
                 .padding()
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: athm.userAccount.password) { newValue in
@@ -66,10 +62,8 @@ struct RegisterView: View {
                 .padding()
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isPhoneValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isPhoneValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPhoneValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: phone) { newValue in
@@ -85,10 +79,8 @@ struct RegisterView: View {
                 .padding()
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isFirstNameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isFirstNameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isFirstNameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: athm.userAccount.firstName) { newValue in
@@ -100,10 +92,8 @@ struct RegisterView: View {
                 .padding()
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isLastNameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isLastNameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isLastNameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .onChange(of: athm.userAccount.lastName) { newValue in
@@ -112,17 +102,27 @@ struct RegisterView: View {
                 }
             
             if showRegisterError {
-                VStack {
+                HStack {
                     Text(registerError)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            }
-            if showError {
-                VStack {
+                .padding(.leading)
+            } else if showError {
+                HStack {
                     Text(errorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
+                }
+                .padding(.leading)
+            } else {
+                HStack {
+                    Text("")
+                        .font(.system(size: 11))
+                    Spacer()
                 }
             }
-            
-            
+            VStack {
             Button(action: {
                 print("🔴 Register Here...")
                 print("email valid?: \(athm.userAccount.isValidEmail(athm.userAccount.email))")
@@ -131,21 +131,15 @@ struct RegisterView: View {
                 print("firstName valid?: \(athm.userAccount.isValidName(athm.userAccount.firstName))")
                 print("lastName valid?: \(athm.userAccount.isValidName(athm.userAccount.lastName))")
                 registerAction()
-//                if AuthManager.shared.isValidRegistration(email: athm.userAccount.isValidEmail(athm.userAccount.email), pass: athm.userAccount.isValidPassword(athm.userAccount.password), phone: athm.userAccount.isValidPhone(athm.userAccount.phoneNumber), first: athm.userAccount.isValidName(athm.userAccount.firstName), last: athm.userAccount.isValidName(athm.userAccount.lastName)) {
-//                    print("🟢 Registered and Validated")
-//                    registerAction()
-//                } else {
-//                    print("🔴 Not Valid")
-//                }
             })
             {
-                Text("Register")
+                Text("Create Account")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
+            .cornerRadius(8)
+            .buttonStyle(.borderedProminent)
             
             Button(action: {
                 athm.signOut()
@@ -153,17 +147,17 @@ struct RegisterView: View {
             {
                 Text("Sign Out")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-                    .padding(.horizontal)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
+            .cornerRadius(8)
+            .buttonStyle(.borderedProminent)
             
-            Spacer()
         }
+            .frame(maxWidth: 200)
+    }
+        .frame(maxWidth: 500)
         .padding()
-        .edgesIgnoringSafeArea(.all)
     }
     
     func registerAction(){

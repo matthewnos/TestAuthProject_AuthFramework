@@ -14,6 +14,7 @@ struct HomeScreen: View {
     @EnvironmentObject var athm: AuthManager
     var body: some View {
 
+            
             switch athm.authState {
             case .register:
                 RegisterView()
@@ -34,7 +35,7 @@ struct HomeScreen: View {
             case .update:
                 EmptyView()
             case .none:
-                LoginView()
+                WelcomeView()
             case .account:
                 AccountView()
             case .confirm:
@@ -42,6 +43,6 @@ struct HomeScreen: View {
             case .mfa:
                 EmptyView()
             }
+        }
     }
-}
 

@@ -20,37 +20,42 @@ struct ForgotPasswordRequestView: View {
     @EnvironmentObject var athm: AuthManager
     
     var body: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 40) {
+        VStack {
+            VStack(alignment: .center, spacing: 20) {
                 Group {
                     TextField("Email", text: $athm.userAccount.email)
                         .padding()
                         .font(.body)
                         .foregroundColor(.primary)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                        )
+                        .background(RoundedRectangle(cornerRadius: 8).fill(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                         .cornerRadius(8)
-                        .padding(.horizontal)
                         .onChange(of: athm.userAccount.email) { newValue in
                             isUsernameValid = athm.isValidEmail(newValue)
                         }
                     
                     if showAuthError {
-                        VStack(spacing: 20) {
+                        HStack {
                             Text(authErrorMessage)
+                                .font(.system(size: 11))
+                            Spacer()
                         }
-                    }
-                    
-                    if showError {
-                        VStack(spacing: 20) {
+                    } else if showError {
+                        HStack {
                             Text(errorMessage)
+                                .font(.system(size: 11))
+                            Spacer()
+                        }
+                    } else {
+                        HStack {
+                            Text(" ")
+                                .font(.system(size: 11))
+                            Spacer()
                         }
                     }
                 }
                 
-                HStack {
+                VStack {
                     Button(action: {
                         showAuthError = false
                         showError = false
@@ -59,23 +64,18 @@ struct ForgotPasswordRequestView: View {
                     {
                         Text("Confirm")
                             .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(8)
+                            .frame(height: 25)
+                            .frame(maxWidth: .infinity)
                     }
-                    
-                    Spacer()
+                    .cornerRadius(8)
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!isUsernameValid)
                 }
-                .padding(.leading, 40)
+                .frame(maxWidth: 200)
             }
-            
-            Spacer()
         }
+        .frame(maxWidth: 500)
         .padding()
-        .onAppear {
-            print("View appeared")
-        }
     }
     
     func forgotPassword() {
@@ -94,5 +94,7 @@ struct ForgotPasswordRequestView: View {
             }
         }
     }
+    
+    
 }
 

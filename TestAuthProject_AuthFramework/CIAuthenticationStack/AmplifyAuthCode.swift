@@ -261,7 +261,7 @@ class AuthManager: ObservableObject {
                 isSignedIn = true
                 authState = .account
             } else {
-                authState = .login
+                authState = .none
                 isSignedIn = false
             }
             print("🟢 NWM Is amplify Signed In - \(session.isSignedIn)")
@@ -290,7 +290,7 @@ class AuthManager: ObservableObject {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
                 isSignedIn = false
-                authState = .login
+                authState = .none
                 userAccount = UserAccount.make()
             }
             print("Completed Sign Out.")
@@ -299,7 +299,7 @@ class AuthManager: ObservableObject {
         default:
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
                 isSignedIn = false
-                authState = .login
+                authState = .none
                 userAccount = UserAccount.make()
             }
             print("Partial Sign Out...")
@@ -328,9 +328,13 @@ class AuthManager: ObservableObject {
                     print("Invalid Parameter")
                     throw error
                 default:
+                    print("break")
                     break
                 }
-            }
+            } else {
+                print("else throw")
+                throw error
+            }    
         } catch {
             print("Unexpected error: \(error)")
             throw error
@@ -390,22 +394,13 @@ class AuthManager: ObservableObject {
         Task {
             do {
                 await signOutGlobally()
-                authState = .login
             }
         }
     }
     //MARK: Delete User
     
     
-    func deleteUserAction(){
-        Task {
-            do {
-                await deleteUser()
-                await signOutGlobally()
-                authState = .register
-            }
-        }
-    }
+
     
     func deleteUser() async {
         do {

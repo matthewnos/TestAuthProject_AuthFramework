@@ -17,109 +17,94 @@ struct LoginView: View {
     @State private var errorMessage = ""
     @State private var showError = false
     @EnvironmentObject var athm: AuthManager
+    @Environment(\.horizontalSizeClass) var hSizeClass
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            TextField("Email", text: $athm.userAccount.email)
-                .padding()
-                .font(.body)
-                .foregroundColor(.primary)
-                .background(RoundedRectangle(cornerRadius: 8).fill(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
-                .onChange(of: athm.userAccount.email) { newValue in
-                    isUsernameValid = athm.isValidEmail(newValue)
-                    print(isUsernameValid)
+        VStack(alignment: .center, spacing: 20) {
+            VStack {
+                TextField("Email", text: $athm.userAccount.email)
+                    .padding()
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
+                    .onChange(of: athm.userAccount.email) { newValue in
+                        isUsernameValid = athm.isValidEmail(newValue)
+                        print(isUsernameValid)
+                    }
+                
+                SecureField("Password", text: $athm.userAccount.password)
+                    .padding()
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
+                    .onChange(of: athm.userAccount.password) { newValue in
+                        isPasswordValid = athm.isValidPassword(newValue)
+                        print(isPasswordValid)
+                    }
+                HStack {
+                    if showLoginError {
+                        HStack {
+                            Text(loginError)
+                                .font(.system(size: 11))
+                            Spacer()
+                        }
+                    } else if showError {
+                        HStack {
+                            Text(errorMessage)
+                                .font(.system(size: 11))
+                            Spacer()
+                        }
+                    } else {
+                        HStack {
+                            Text("")
+                                .font(.system(size: 11))
+                            Spacer()
+                        }
+                    }
+                    Button(action: {
+                        athm.authState = .forgotRequest
+                    }) {
+                        Text("Forgot Password")
+                            .font(.headline)
+                            .foregroundColor(.blue)
+                    }
                 }
-            
-            SecureField("Password", text: $athm.userAccount.password)
-                .padding()
-                .font(.body)
-                .foregroundColor(.primary)
-                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
-                .onChange(of: athm.userAccount.password) { newValue in
-                    isPasswordValid = athm.isValidPassword(newValue)
-                    print(isPasswordValid)
-                }
-            if showLoginError {
                 VStack {
-                    Text(loginError)
+                    Button(action: {
+                        showLoginError = false
+                        showError = false
+                        signIn()
+                    }) {
+                        Text("Log in")
+                            .font(.headline)
+                            .frame(height: 25)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .cornerRadius(8)
+                    .buttonStyle(.borderedProminent)
+                    
+                    Text("Don't have an account yet?")
+                        .padding(.top,30)
+                    Button(action: {
+                        athm.authState = .register
+                    }) {
+                        Text("Create Account")
+                            .font(.headline)
+                            .frame(height: 25)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .cornerRadius(8)
+                    .buttonStyle(.borderedProminent)
                 }
+                .frame(maxWidth: 200)
             }
-            if showError {
-                VStack {
-                    Text(errorMessage)
-                }
-            }
-            
-            Button(action: {
-                signIn()
-            }) {
-                Text("Log in")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: {
-                showLoginError = false
-                showError = false
-                athm.signOut()
-            }) {
-                Text("Sign Out")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: {
-                athm.authState = .forgotRequest
-            }) {
-                Text("Forgot Password")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: {
-                athm.authState = .none
-            }) {
-                Text("Account View")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Button(action: {
-                athm.authState = .register
-            }) {
-                Text("Create Account")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
-            }
-            
-            Spacer()
-        }
-        .padding()
-        .edgesIgnoringSafeArea(.all)
-        .onAppear {
-            Task {
-                try await athm.awaitAuthSession()
-            }
+            //        .frame(maxWidth: hSizeClass == .compact ? .infinity : 500)
+            .frame(maxWidth: 500)
+            .padding()
         }
     }
-    
     func signIn(){
         Task{
             do {

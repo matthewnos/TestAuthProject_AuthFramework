@@ -29,115 +29,103 @@ struct ForgotPasswordConfirmationView: View {
     @EnvironmentObject var athm: AuthManager
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 40) {
+        VStack(alignment: .center, spacing: 20) {
             TextField("Email", text: $athm.userAccount.email)
                 .padding()
-                .frame(maxWidth: .infinity)
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isUsernameValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isUsernameValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .onChange(of: athm.userAccount.email) { newValue in
                     isUsernameValid = athm.isValidEmail(newValue)
                     print(isUsernameValid)
                 }
-                .padding(.horizontal)
             
             SecureField("New Password", text: $newPassword)
                 .padding()
-                .frame(maxWidth: .infinity)
                 .font(.body)
                 .foregroundColor(.primary)
-                .background(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2)
-                )
+                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
                 .cornerRadius(8)
                 .onChange(of: newPassword) { newValue in
                     isPasswordValid = athm.isValidPassword(newValue)
                     print(isPasswordValid)
                 }
-                .padding(.horizontal)
             
             TextField("Confirmation Code", text: $confirmationCode)
                 .padding()
-                .frame(maxWidth: .infinity)
                 .font(.body)
                 .foregroundColor(.primary)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(8)
-                .padding(.horizontal)
             
-                if showAuthError {
-                    VStack() {
-                        Text(authErrorMessage)
-                    }
+            if showAuthError {
+                HStack {
+                    Text(authErrorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-                
-                if showError {
-                    VStack() {
-                        Text(errorMessage)
-                    }
+                .padding(.leading)
+            } else if showError {
+                HStack {
+                    Text(errorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            
-            if showResendError {
-                VStack() {
+                .padding(.leading)
+            } else if showResendError {
+                HStack {
                     Text(resendErrorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            }
-            
-            if showReError {
-                VStack() {
+                .padding(.leading)
+            } else if showReError {
+                HStack {
                     Text(reErrorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
+                }
+                .padding(.leading)
+            } else {
+                HStack {
+                    Text(" ")
+                        .font(.system(size: 11))
+                    Spacer()
                 }
             }
-            
+            VStack {
             Button(action: {
-                        showError = false
-                        showAuthError = false
-                        showResendError = false
-                        showReError = false
-                        forgotPasswordConfirm()
+                showError = false
+                showAuthError = false
+                showResendError = false
+                showReError = false
+                forgotPasswordConfirm()
             }) {
                 Text("Confirm")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
             .cornerRadius(8)
-            .padding(.horizontal)
+            .buttonStyle(.borderedProminent)
             
             Button(action: {
-                        showError = false
-                        showAuthError = false
-                        showResendError = false
-                        showReError = false
-                        resendCode()
+                signOut()
             }) {
-                Text("Resend Code")
+                Text("Sign Out")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
-            .frame(maxWidth: .infinity)
-            .padding()
-            .background(Color.blue)
             .cornerRadius(8)
-            .padding(.horizontal)
+            .buttonStyle(.borderedProminent)
+            }.frame(maxWidth: 200)
         }
-        .padding(.vertical)
+        .frame(maxWidth: 500)
+        .padding()
     }
     
     func forgotPasswordConfirm() {
@@ -174,6 +162,14 @@ struct ForgotPasswordConfirmationView: View {
                 print("❌ Unexpected error: \(error)")
             }
             
+        }
+    }
+    
+    func signOut(){
+        Task {
+            do {
+                await athm.signOutGlobally()
+            }
         }
     }
 }

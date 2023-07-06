@@ -25,78 +25,70 @@ struct PasswordResetView: View {
     @EnvironmentObject var athm: AuthManager
     
     var body: some View {
-        VStack(spacing: 0) {
-            VStack {
-                VStack(alignment: .leading, spacing: 40) {
-                    Group {
-                        HStack(spacing: 20){
-                            SecureField("Old Password", text: $athm.userAccount.password)
-                                .padding()
-                                .font(.body)
-                                .foregroundColor(.primary)
-                                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
-                                .onChange(of: athm.userAccount.password) { newValue in
-                                    isPasswordValid = athm.isValidPassword(newValue)
-                                    print(isPasswordValid)
-                                }
-                            Spacer()
-                        }.padding(.leading, 40)
-                        
-                        HStack(spacing: 20){
-                            SecureField("New Password", text: $newPassword)
-                                .padding()
-                                .font(.body)
-                                .foregroundColor(.primary)
-                                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
-                                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
-                                .onChange(of: newPassword) { newValue in
-                                    isNewPasswordValid = athm.isValidPassword(newValue)
-                                    print(isNewPasswordValid)
-                                }
-                            Spacer()
-                        }.padding(.leading, 40)
-                        
-                        VStack(spacing: 20){
-                            if showAuthError {
-                                HStack(spacing: 20) {
-                                    Text(authErrorMessage)
-                                    Spacer()
-                                }.padding(.leading, 40)
-                            }
-                            if showError {
-                                HStack(spacing: 20) {
-                                    Text(errorMessage)
-                                    Spacer()
-                                }.padding(.leading, 40)
-                            }
-                        }
+        VStack(alignment: .center, spacing: 20) {
+            SecureField("Old Password", text: $athm.userAccount.password)
+                .padding()
+                .font(.body)
+                .foregroundColor(.primary)
+                .background(RoundedRectangle(cornerRadius: 8).fill(isPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(isPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
+                .onChange(of: athm.userAccount.password) { newValue in
+                    isPasswordValid = athm.isValidPassword(newValue)
+                    print(isPasswordValid)
+                }
+            
+                SecureField("New Password", text: $newPassword)
+                    .padding()
+                    .font(.body)
+                    .foregroundColor(.primary)
+                    .background(RoundedRectangle(cornerRadius: 8).fill(isNewPasswordValid ? Color.gray.opacity(0.1) : Color.red.opacity(0.2)))
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(isNewPasswordValid ? Color.green.opacity(0.3) : Color.red.opacity(0.8), lineWidth: 2))
+                    .onChange(of: newPassword) { newValue in
+                        isNewPasswordValid = athm.isValidPassword(newValue)
+                        print(isNewPasswordValid)
+                    }
+            
+                if showAuthError {
+                    VStack {
+                        Text(authErrorMessage)
+                            .font(.system(size: 11))
+                    }
+                } else if showError {
+                    VStack {
+                        Text(errorMessage)
+                            .font(.system(size: 11))
+                    }
+                } else {
+                    VStack {
+                        Text(" ")
+                            .font(.system(size: 11))
                     }
                 }
-                VStack {
-                    HStack {
-                        Button(action: {
-                            Task {
-                                do {
-                                    try await resetPassword()
-                                } catch {
-                                    print("Error:", error)
-                                }
-                            }
-                        }) {
-                            Text("Confirm")
-                                .font(.headline)
-                                .foregroundColor(.white)
-                                .padding()
-                                .background(Color.blue)
-                                .cornerRadius(8)
+                
+            VStack {
+                Button(action: {
+                    Task {
+                        do {
+                            try await resetPassword()
+                        } catch {
+                            print("Error:", error)
                         }
-                        Spacer()
-                    }.padding(.leading, 40)
+                    }
+                }) {
+                    Text("Confirm")
+                        .font(.headline)
+                        .frame(height: 25)
+                        .frame(maxWidth: .infinity)
                 }
+                .cornerRadius(8)
+                .buttonStyle(.borderedProminent)
+                .disabled(!isNewPasswordValid && !isPasswordValid)
             }
-            Spacer()
+            .frame(maxWidth: 200)
+
         }
+        .frame(maxWidth: 500)
+        .padding()
     }
     
     func resetPassword() async throws {

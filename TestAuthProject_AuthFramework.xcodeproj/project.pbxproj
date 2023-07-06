@@ -22,6 +22,7 @@
 		FF5B22682A49E0B400FDFCFB /* Stopwatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22672A49E0B400FDFCFB /* Stopwatch.swift */; };
 		FF5B22712A49F66800FDFCFB /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22702A49F66800FDFCFB /* HomeScreen.swift */; };
 		FF5B22732A4A312600FDFCFB /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5B22722A4A312600FDFCFB /* LoginView.swift */; };
+		FF9DEF522A571068006B4B9D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9DEF512A571068006B4B9D /* WelcomeView.swift */; };
 		FFF171D42A4B459B00F9DAEA /* ConfirmEmail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */; };
 		FFF171D62A4B895900F9DAEA /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D52A4B895900F9DAEA /* RegisterView.swift */; };
 		FFF171D82A4C562200F9DAEA /* ForgotPasswordRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */; };
@@ -43,6 +44,7 @@
 		FF5B22672A49E0B400FDFCFB /* Stopwatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stopwatch.swift; sourceTree = "<group>"; };
 		FF5B22702A49F66800FDFCFB /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		FF5B22722A4A312600FDFCFB /* LoginView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		FF9DEF512A571068006B4B9D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmail.swift; sourceTree = "<group>"; };
 		FFF171D52A4B895900F9DAEA /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordRequestView.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				FF5B22722A4A312600FDFCFB /* LoginView.swift */,
 				FFF171D32A4B459B00F9DAEA /* ConfirmEmail.swift */,
+				FF9DEF512A571068006B4B9D /* WelcomeView.swift */,
 				FFF171D52A4B895900F9DAEA /* RegisterView.swift */,
 				FFF171D92A4C578F00F9DAEA /* ForgotPasswordConfirmView.swift */,
 				FFF171D72A4C562200F9DAEA /* ForgotPasswordRequestView.swift */,
@@ -224,6 +227,7 @@
 				FFF171DE2A4C5B9C00F9DAEA /* AccountView.swift in Sources */,
 				FF5B22712A49F66800FDFCFB /* HomeScreen.swift in Sources */,
 				FFF171D82A4C562200F9DAEA /* ForgotPasswordRequestView.swift in Sources */,
+				FF9DEF522A571068006B4B9D /* WelcomeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

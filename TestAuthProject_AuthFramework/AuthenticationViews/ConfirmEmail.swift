@@ -22,36 +22,45 @@ struct ConfirmEmail: View {
     @EnvironmentObject var athm: AuthManager
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center, spacing: 20) {
             SecureField("Verification Code", text: $verificationCode)
                 .padding()
                 .font(.body)
                 .background(Color.gray.opacity(0.1))
                 .cornerRadius(8)
-                .padding(.horizontal)
             
             if showConfirmError {
-                VStack {
+                HStack {
                     Text(confirmError)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            }
-            if showError {
-                VStack {
+            } else if showError {
+                HStack {
                     Text(errorMessage)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            }
-            
-            if showResendError {
-                VStack {
+            } else if showResendError {
+                HStack {
                     Text(resendError)
+                        .font(.system(size: 11))
+                    Spacer()
                 }
-            }
-            if showReError {
-                VStack {
+            }else if showReError {
+                HStack {
                     Text(errorReMessage)
+                        .font(.system(size: 11))
+                    Spacer()
+                }
+            } else {
+                HStack {
+                    Text(" ")
+                        .font(.system(size: 11))
+                    Spacer()
                 }
             }
-            
+            VStack {
             Button(action: {
                 print("🔴 Confirm Code Here...")
                 confirmAction()
@@ -62,11 +71,11 @@ struct ConfirmEmail: View {
             }) {
                 Text("Confirm Code")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
+            .cornerRadius(8)
+            .buttonStyle(.borderedProminent)
             
             Button(action: {
                 resendCode()
@@ -77,16 +86,16 @@ struct ConfirmEmail: View {
             }) {
                 Text("Resend Code")
                     .font(.headline)
-                    .foregroundColor(.white)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(height: 25)
+                    .frame(maxWidth: .infinity)
             }
+            .cornerRadius(8)
+            .buttonStyle(.borderedProminent)
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: 200)
+        }
+        .frame(maxWidth: 500)
         .padding()
-        .background(Color.white)
-        .ignoresSafeArea()
     }
     
     func confirmAction(){
